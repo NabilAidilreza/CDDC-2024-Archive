@@ -14,6 +14,16 @@ This repo will be used to track all tools and python codes used for the competit
 - **Description:** Sherlock is a powerful tool written in Python that helps find usernames across various social media platforms. By providing a username, Sherlock checks numerous websites to see if the username exists on those platforms.
 - **Usage:** `python sherlock username`
 
+## Network Category
+
+### Wireshark
+- **Description:** Wireshark is a widely-used network protocol analyzer for capturing and analyzing network traffic. It allows you to examine data from a live network or from a capture file on disk.
+- **Usage:** Download and install Wireshark from the [official website](https://www.wireshark.org/), then open capture files (pcap) for analysis.
+
+### aPackets
+- **Description:** aPackets is a PCAP visualizer that provides a graphical representation of network traffic. It helps identify suspicious servers and IPs, making it useful for network analysis and security investigations.
+- **Usage:** Access aPackets via the [website](https://apackets.com/) and upload your PCAP file for visualization and analysis.
+
 ## Cryptography
 
 ### DCODE Website
