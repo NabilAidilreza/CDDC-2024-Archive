@@ -50,7 +50,7 @@ a. Decode (Base)\n\
 b. Encode (Base)\n\
 c. Search (OSINT)\n\n\
 <== Misc ==>\n\
-1. OSINT\n\
+1. Read file in txt\n\
 2. Identify cipher\n\
 3. Pwn send payload\n")
 
@@ -169,6 +169,16 @@ def quickSearch(keyword):
     print("Other useful sites: 'https://haveibeenpwned.com/'")
     return 0
 
+def readFile(filename):
+    filesize = os.path.getsize(filename)
+    if filesize > 2000000:
+        print("File is too large")
+    else:
+        with open(filename,"rb") as file:
+            content = file.readlines()
+            content = list(content)
+            for ele in content:
+                print(ele.decode())
 
 def main():
     drawmainbanner()
@@ -179,7 +189,9 @@ def main():
         if user:
             if user.isnumeric():
                 if user == '1':
-                    pass
+                    print("Make sure file in same directory.\n")
+                    filename = input("Filename (with extension) => ")
+                    readFile(filename)
                 elif user == '2':
                     identify_cipher = "https://www.dcode.fr/cipher-identifier"
                     webbrowser.get('bing').open(identify_cipher, new = 0, autoraise = True)
