@@ -14,6 +14,12 @@ This repo will be used to track all tools and python codes used for the competit
 - **Description:** Sherlock is a powerful tool written in Python that helps find usernames across various social media platforms. By providing a username, Sherlock checks numerous websites to see if the username exists on those platforms.
 - **Usage:** `python sherlock username`
 
+## Cryptography
+
+### DCODE Website
+- **Description:** DCODE is an online platform offering a variety of cryptographic tools and solvers. It supports encoding, decoding, and solving various types of ciphers, making it a versatile tool for cryptography challenges.
+- **Usage:** Access the tools via the [DCODE website](https://www.dcode.fr/).
+
 ## Forensics
 
 ### Volatility 3
