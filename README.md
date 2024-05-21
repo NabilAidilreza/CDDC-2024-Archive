@@ -1,4 +1,4 @@
 # CDDC-2024-TOOLKIT
 A simple toolkit i made to simplify basic CTF techniques
-# N0te #
+## Note ##
 Will be tracking all tools used in the competition here too
