@@ -42,21 +42,6 @@ def drawsubbanner():
           \n\
 <===================================================================================>\n\n")
 
-def typewriter(line,print_type):
-    if print_type.upper() == "F":
-        time = 0.01
-    elif print_type.upper() == "M":
-        time = 0.03
-    elif print_type.upper() == "S":
-        time = 0.05
-    else:
-        time = 1
-    for char in line:
-        print(char, end='')
-        sys.stdout.flush()
-        sleep(time)
-
-
 
 def displayMenu():
     print("\
@@ -64,10 +49,10 @@ def displayMenu():
 a. Decode (Base)\n\
 b. Encode (Base)\n\
 c. Search (OSINT)\n\n\
-<== Categories ==>\n\
+<== Misc ==>\n\
 1. OSINT\n\
-2. Cryptography\n\
-3. Binary Exploitation\n")
+2. Identify cipher\n\
+3. Pwn send payload\n")
 
 def quickEncode(string_to_encode):
     # Base64 #
@@ -171,6 +156,7 @@ def tryRecursive(string,lst = []):
 
  
 def quickSearch(keyword):
+    print("Opening relevant sites...")
     normal_search = "https://www.bing.com/search?q="+keyword
     map_search = "https://www.google.com/maps/search/"+keyword
     ip_search = "https://www.shodan.io/host/"+keyword
@@ -192,7 +178,11 @@ def main():
         user = input("=> ")
         if user:
             if user.isnumeric():
-                pass
+                if user == '1':
+                    pass
+                elif user == '2':
+                    identify_cipher = "https://www.dcode.fr/cipher-identifier"
+                    webbrowser.get('bing').open(identify_cipher, new = 0, autoraise = True)
             else:
                 if user.lower() == 'a':
                     encrypted_string = input("Enter encrypted string => ")
@@ -215,3 +205,18 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+def typewriter(line,print_type):
+    if print_type.upper() == "F":
+        time = 0.01
+    elif print_type.upper() == "M":
+        time = 0.03
+    elif print_type.upper() == "S":
+        time = 0.05
+    else:
+        time = 1
+    for char in line:
+        print(char, end='')
+        sys.stdout.flush()
+        sleep(time)
