@@ -36,6 +36,14 @@ This repo will be used to track all tools and python codes used for the competit
 - **Description:** Radare2 is a highly versatile open-source framework for reverse engineering and analyzing binaries. It supports various architectures and file formats, making it a valuable tool for binary exploitation.
 - **Usage:** Commands are executed within the radare2 interface for tasks such as disassembly, debugging, and analysis.
 
+### scdbg
+- **Description:** scdbg (Shellcode Debugger) is a tool used for analyzing shellcode. It emulates shellcode execution, providing insights into its behavior, which is essential for understanding and developing exploits.
+- **Usage:** Run shellcode within scdbg to analyze its behavior and debug any issues.
+
+### Ghidra
+- **Description:** Ghidra is a comprehensive open-source software reverse engineering (SRE) suite developed by the National Security Agency (NSA). It includes a variety of features for analyzing compiled code on multiple platforms.
+- **Usage:** Use Ghidra's graphical interface and tools to disassemble, decompile, and analyze binary files.
+
 ## Web Exploitation
 
 ### RsaCtfTool
