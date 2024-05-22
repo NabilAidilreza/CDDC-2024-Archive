@@ -1,5 +1,6 @@
 from time import sleep
 import sys,os
+
 # Decoding/Encoding #
 import base58
 import base64
@@ -11,9 +12,7 @@ import glob
 from PIL import Image
 from PIL.ExifTags import TAGS
 #### SET UP SETTINGS ####
-flag_format = "CDDC2024{}"
-
-
+flag_format = "CDDC2024{flag_payload}"
 
 ### NOTE TO NEW USERS ###
 # YOUR RELATIVE PATH OF CHOICE #
@@ -197,6 +196,7 @@ def report_image():
             print("No EXIF Metadata.")
     else:
         print("No valid image detected.")
+
 def get_first_image_file(directory):
     patterns = ["*.jpg", "*.png", "*.jfif"]
     image_files = []
@@ -208,18 +208,40 @@ def get_first_image_file(directory):
 
 def readFile(filename):
     filesize = os.path.getsize(filename)
-    if filesize > 2000000:
-        print("File is too large")
-    else:
+    if filesize < 1000000:
         with open(filename,"rb") as file:
             content = file.readlines()
             content = list(content)
             for ele in content:
                 print(ele.decode())
-# Finish THis #
-# FInish this #
-def scanFlag():
-    pass
+    else:
+        print("File too large. Splitting to same txts...")
+        split = filesize // 300000
+        for i in range(split):
+            file = open(f"T{i}.txt","wb")
+            temp = content[:300000]
+            for ele in temp:
+                file.write(ele)
+            file.close()
+            content = content[300000:]
+        file = open(f"TFINAL.txt","wb")
+        temp = content
+        for ele in temp:
+            file.write(ele)
+        file.close()
+        print("Success!!")
+
+def scanFlag(filename):
+    global flag_format
+    flag_head = flag_format[:flag_format.index("{")]
+    with open(filename,"rb") as file:
+        content = file.readlines()
+        content = list(content)
+        for line in content:
+            if flag_head in line:
+                print(line)
+                print("Possible Flag Found!!!")
+    file.close()
 
 def main():
     drawmainbanner()
@@ -249,6 +271,10 @@ def main():
                 elif user.lower() == 'd':
                     print("Make sure file in same directory.")
                     report_image()
+                elif user.lower() == 'e':
+                    print("Make sure file in same directory.")
+                    filename = input("Filename (with extension) => ")
+                    scanFlag(filename)
                 elif user.lower() == 'menu':
                     displayMenu()
                 elif user.lower() == 'clr':
@@ -261,18 +287,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-def typewriter(line,print_type):
-    if print_type.upper() == "F":
-        time = 0.01
-    elif print_type.upper() == "M":
-        time = 0.03
-    elif print_type.upper() == "S":
-        time = 0.05
-    else:
-        time = 1
-    for char in line:
-        print(char, end='')
-        sys.stdout.flush()
-        sleep(time)
