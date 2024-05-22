@@ -6,8 +6,15 @@ import base64
 import binascii
 # Search #
 import webbrowser
-
+# Report #
+import glob
+from PIL import Image
+from PIL.ExifTags import TAGS
 #### SET UP SETTINGS ####
+flag_format = "CDDC2024{}"
+
+
+
 ### NOTE TO NEW USERS ###
 # YOUR RELATIVE PATH OF CHOICE #
 bing_path = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
@@ -48,11 +55,18 @@ def displayMenu():
 <=== Quick ===>\n\
 a. Decode (Base)\n\
 b. Encode (Base)\n\
-c. Search (OSINT)\n\n\
+c. Search (OSINT)\n\
+d. Report (Image)\n\
+e. Scan   (Flag)\n\n\
 <== Misc ==>\n\
-1. Read file in txt\n\
+1. Read file in txt (large)\n\
 2. Identify cipher\n\
-3. Pwn send payload\n")
+3. Pwn send payload\n\n\
+<== System ==>\n\
+cmd: clr\n\
+cmd: menu\n")
+
+### ENCODE / DECODE ###
 
 def quickEncode(string_to_encode):
     # Base64 #
@@ -153,8 +167,7 @@ def tryRecursive(string,lst = []):
         print("\nEncoding pattern: ",' => '.join(str(x) for x in lst))
         return 0
 
-
- 
+### SEARCH ###
 def quickSearch(keyword):
     print("Opening relevant sites...")
     normal_search = "https://www.bing.com/search?q="+keyword
@@ -169,6 +182,30 @@ def quickSearch(keyword):
     print("Other useful sites: 'https://haveibeenpwned.com/'")
     return 0
 
+### REPORT ###
+def report_image():
+    image_path = get_first_image_file(os.getcwd())
+    if image_path:
+        image = Image.open(image_path)
+        exif_data = image._getexif()
+        if exif_data:
+            print("Retrieving EXIF Data...")
+            for tag, value in exif_data.items():
+                tag_name = TAGS.get(tag, tag)
+                print(f"{tag_name}: {value}")
+        else:
+            print("No EXIF Metadata.")
+    else:
+        print("No valid image detected.")
+def get_first_image_file(directory):
+    patterns = ["*.jpg", "*.png", "*.jfif"]
+    image_files = []
+    for pattern in patterns:
+        image_files.extend(glob.glob(os.path.join(directory, pattern)))
+    if not image_files:
+        return None
+    return os.path.basename(image_files[0])
+
 def readFile(filename):
     filesize = os.path.getsize(filename)
     if filesize > 2000000:
@@ -179,6 +216,10 @@ def readFile(filename):
             content = list(content)
             for ele in content:
                 print(ele.decode())
+# Finish THis #
+# FInish this #
+def scanFlag():
+    pass
 
 def main():
     drawmainbanner()
@@ -189,7 +230,7 @@ def main():
         if user:
             if user.isnumeric():
                 if user == '1':
-                    print("Make sure file in same directory.\n")
+                    print("Make sure file in same directory.")
                     filename = input("Filename (with extension) => ")
                     readFile(filename)
                 elif user == '2':
@@ -205,6 +246,9 @@ def main():
                 elif user.lower() == 'c':
                     keyword = input("Keyword => ")
                     quickSearch(keyword)
+                elif user.lower() == 'd':
+                    print("Make sure file in same directory.")
+                    report_image()
                 elif user.lower() == 'menu':
                     displayMenu()
                 elif user.lower() == 'clr':
