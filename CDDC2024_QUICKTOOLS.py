@@ -1,6 +1,6 @@
 from time import sleep
 import sys,os
-
+from pwn import *
 # Decoding/Encoding #
 import base58
 import base64
@@ -105,6 +105,11 @@ def quickEncode(string_to_encode):
 def quickDecode(encrypted_string,lst = []):
     base_encoding = lst
     message = ''
+    def askRecursive(message,base_encoding):
+        if message != "":
+            tryRecursive(message,base_encoding)
+        else:
+            print("Unknown Base Encoding.")
     # Base64 #
     try:
         print("Attempting Base64 Decryption...")
@@ -112,6 +117,8 @@ def quickDecode(encrypted_string,lst = []):
         message = decrypted_string.decode()
         base_encoding.append("base64")
         print("Success!!!\nDecrypted String => " + message)
+        askRecursive(message,base_encoding)
+        return
     except (binascii.Error, ValueError):
         print("Failed.") 
     # Base32 #
@@ -121,6 +128,8 @@ def quickDecode(encrypted_string,lst = []):
         message = decrypted_string.decode()
         base_encoding.append("base32")
         print("Success!!!\nDecrypted String => " + message)
+        askRecursive(message,base_encoding)
+        return
     except (binascii.Error, ValueError):
         print("Failed.")
     # Base16 #
@@ -130,6 +139,8 @@ def quickDecode(encrypted_string,lst = []):
         message = decrypted_string.decode()
         base_encoding.append("base16")
         print("Success!!!\nDecrypted String => " + message)
+        askRecursive(message,base_encoding)
+        return
     except (binascii.Error, ValueError):
         print("Failed.")
     # Base8 (Hex) #
@@ -139,6 +150,8 @@ def quickDecode(encrypted_string,lst = []):
         message = decrypted_string.decode()
         base_encoding.append("base8")
         print("Success!!!\nDecrypted String => " + message)
+        askRecursive(message,base_encoding)
+        return
     except ValueError:
         print("Failed.")
     
@@ -149,12 +162,10 @@ def quickDecode(encrypted_string,lst = []):
         message = decrypted_string.decode()
         base_encoding.append("base58")
         print("Success!!!\nDecrypted String => " + message)
+        askRecursive(message,base_encoding)
+        return
     except (binascii.Error, ValueError):
         print("Failed.")
-    if message != "":
-        tryRecursive(message,base_encoding)
-    else:
-        print("Unknown Base Encoding.")
 
 def tryRecursive(string,lst = []):
     user = input("Try recursive decoding?: ")
@@ -243,6 +254,15 @@ def scanFlag(filename):
                 print("Possible Flag Found!!!")
     file.close()
 
+def sendPayload(hostport,offset, payload):
+    HOST,PORT = hostport.split(" ")
+    r = remote(HOST, PORT)
+    actual_offset = "A" * int(offset)
+    print(r.recv())
+    r.sendline(actual_offset + payload)
+    print("Payload sent...")
+    print(r.recv())
+
 def main():
     drawmainbanner()
     drawsubbanner()
@@ -258,6 +278,12 @@ def main():
                 elif user == '2':
                     identify_cipher = "https://www.dcode.fr/cipher-identifier"
                     webbrowser.get('bing').open(identify_cipher, new = 0, autoraise = True)
+                elif user == '3':
+                    print("Example: 3.1.147.170 10004")
+                    hostport = input("Host Port => ")
+                    offset = input("Offset => ")
+                    payload = input("Payload => ")
+                    sendPayload(hostport,offset,payload)
             else:
                 if user.lower() == 'a':
                     encrypted_string = input("Enter encrypted string => ")
