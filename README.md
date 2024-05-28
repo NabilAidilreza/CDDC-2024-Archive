@@ -1,5 +1,6 @@
 # Overview #
 BrainHack CDDC 2024 (A Jeopardy-style Capture-The-Flag (CTF) competition)
+
 Repository to store my team's answers for CDDC 2024
 
 ## Disclaimer ##
