@@ -1,6 +1,6 @@
 from time import sleep
 import sys,os
-from pwn import *
+from pwn import remote,p32
 # Decoding/Encoding #
 import base58
 import base64
@@ -15,11 +15,25 @@ from PIL.ExifTags import TAGS
 flag_format = "CDDC2024{flag_payload}"
 
 ### NOTE TO NEW USERS ###
-# YOUR RELATIVE PATH OF CHOICE #
+
+### EDIT TO CHANGE TO YOUR DEFAULT BROWSER PATH ###
 bing_path = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 webbrowser.register('bing', None,  
                     webbrowser.BackgroundBrowser(bing_path)) 
 
+canlinux = False
+# CHECKING SYSTEM VERSION #
+op_sys = sys.platform
+if "WIN" in op_sys.upper():
+    print("\t\t== Operating System: WINDOWS ===\n")
+    print("\t\t== Using Win Quick Functions ===\n")
+elif ["UBUNTU","LINUX"] in op_sys.upper():
+    print("\t\t== Operating System: LINUX   ===\n")
+    print("\t\t== Using Lin Quick Functions ===\n")
+    canlinux = True
+else:
+    print("\t\t== Operating System: ------- ===\n")
+    print("\t\t== Using   Python  Functions ===\n") 
 
 def drawmainbanner():
     print(",_,_,_,_,_,_,_,_,_,_|______________________________________________________\n\
@@ -56,11 +70,10 @@ a. Decode (Base)\n\
 b. Encode (Base)\n\
 c. Search (OSINT)\n\
 d. Report (Image)\n\
-e. Scan   (Flag)\n\n\
 <== Misc ==>\n\
 1. Read file in txt (large)\n\
 2. Identify cipher\n\
-3. Pwn send payload\n\n\
+3. Pwn test offset\n\n\
 <== System ==>\n\
 cmd: clr\n\
 cmd: menu\n")
@@ -242,31 +255,23 @@ def readFile(filename):
         file.close()
         print("Success!!")
 
-def scanFlag(filename):
-    global flag_format
-    flag_head = flag_format[:flag_format.index("{")]
-    with open(filename,"rb") as file:
-        content = file.readlines()
-        content = list(content)
-        for line in content:
-            if flag_head in line:
-                print(line)
-                print("Possible Flag Found!!!")
-    file.close()
-
-def sendPayload(hostport,offset, payload):
-    HOST,PORT = hostport.split(" ")
+def tryOffset(hostport,offset):
+    if hostport == "":
+        return "Error encountered..."
+    HOST, PORT = hostport.split()
+    PORT = int(PORT)  # Ensure the port is an integer
     r = remote(HOST, PORT)
-    actual_offset = "A" * int(offset)
+    actual_offset = 'A' * int(offset)  # Create the offset with 'A'
     print(r.recv())
-    r.sendline(actual_offset + payload)
-    print("Payload sent...")
+    r.sendline(actual_offset)
+    print("Payload sent: ",actual_offset)
     print(r.recv())
 
 def main():
     drawmainbanner()
     drawsubbanner()
     displayMenu()
+    currenthostport=""
     while True:
         user = input("=> ")
         if user:
@@ -280,10 +285,15 @@ def main():
                     webbrowser.get('bing').open(identify_cipher, new = 0, autoraise = True)
                 elif user == '3':
                     print("Example: 3.1.147.170 10004")
+                    if currenthostport != "":
+                        print("Last Saved Host Port: ",currenthostport)
                     hostport = input("Host Port => ")
+                    currenthostport = hostport
                     offset = input("Offset => ")
                     payload = input("Payload => ")
-                    sendPayload(hostport,offset,payload)
+                    if hostport == "":
+                        hostport = currenthostport
+                    tryOffset(hostport,offset,payload)
             else:
                 if user.lower() == 'a':
                     encrypted_string = input("Enter encrypted string => ")
@@ -297,10 +307,6 @@ def main():
                 elif user.lower() == 'd':
                     print("Make sure file in same directory.")
                     report_image()
-                elif user.lower() == 'e':
-                    print("Make sure file in same directory.")
-                    filename = input("Filename (with extension) => ")
-                    scanFlag(filename)
                 elif user.lower() == 'menu':
                     displayMenu()
                 elif user.lower() == 'clr':
