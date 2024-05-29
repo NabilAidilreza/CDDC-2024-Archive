@@ -1,25 +1,32 @@
-from time import sleep
+
+#! System #
 import sys,os
 from pwn import remote,p32
+
+#* Sub Libraries #
 # Decoding/Encoding #
 import base58
 import base64
 import binascii
-# Search #
+
+# OSINT #
 import webbrowser
-# Report #
+
+# Forensics #
 import glob
 from PIL import Image
 from PIL.ExifTags import TAGS
-#### SET UP SETTINGS ####
+
+###! SET UP SETTINGS !####
 flag_format = "CDDC2024{flag_payload}"
 
-### NOTE TO NEW USERS ###
+###! NOTE TO NEW USERS ###
 
-### EDIT TO CHANGE TO YOUR DEFAULT BROWSER PATH ###
+###* EDIT TO CHANGE TO YOUR DEFAULT BROWSER PATH ###
 bing_path = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 webbrowser.register('bing', None,  
                     webbrowser.BackgroundBrowser(bing_path)) 
+
 
 canlinux = False
 # CHECKING SYSTEM VERSION #
