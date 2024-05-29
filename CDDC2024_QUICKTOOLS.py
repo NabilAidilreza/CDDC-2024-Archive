@@ -17,30 +17,30 @@ import glob
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-###! SET UP SETTINGS !####
-flag_format = "CDDC2024{flag_payload}"
-
 ###! NOTE TO NEW USERS ###
-
 ###* EDIT TO CHANGE TO YOUR DEFAULT BROWSER PATH ###
 bing_path = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 webbrowser.register('bing', None,  
                     webbrowser.BackgroundBrowser(bing_path)) 
 
+###! Setup Var !####
+flag_format = "CDDC2024{flag_payload}"
 
-canlinux = False
-# CHECKING SYSTEM VERSION #
-op_sys = sys.platform
-if "WIN" in op_sys.upper():
-    print("\t\t== Operating System: WINDOWS ===\n")
-    print("\t\t== Using Win Quick Functions ===\n")
-elif ["UBUNTU","LINUX"] in op_sys.upper():
-    print("\t\t== Operating System: LINUX   ===\n")
-    print("\t\t== Using Lin Quick Functions ===\n")
-    canlinux = True
-else:
-    print("\t\t== Operating System: ------- ===\n")
-    print("\t\t== Using   Python  Functions ===\n") 
+def check_OS():
+    # CHECKING SYSTEM VERSION #
+    op_sys = sys.platform
+    if "WIN" in op_sys.upper():
+        print("\t\t== Operating System: WINDOWS ===\n")
+        print("\t\t== Using Win Quick Functions ===\n")
+        return False
+    elif ["UBUNTU","LINUX"] in op_sys.upper():
+        print("\t\t== Operating System: LINUX   ===\n")
+        print("\t\t== Using Lin Quick Functions ===\n")
+        return True
+    else:
+        print("\t\t== Operating System: ------- ===\n")
+        print("\t\t== Using   Python  Functions ===\n") 
+        return False
 
 def drawmainbanner():
     print(",_,_,_,_,_,_,_,_,_,_|______________________________________________________\n\
@@ -275,6 +275,7 @@ def tryOffset(hostport,offset):
     print(r.recv())
 
 def main():
+    islinux = check_OS()
     drawmainbanner()
     drawsubbanner()
     displayMenu()
